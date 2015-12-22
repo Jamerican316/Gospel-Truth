@@ -1,6 +1,8 @@
+
 $(document).ready(function() {
-  $(".story_row").hide();
-  $(".quiz").hide()
+  $(".story").hide();
+  $(".conclusion").hide();
+  $(".quiz").hide();
 });
   $(".intro_alpha").on('click', function() {
     gospel_quiz.create();
@@ -8,47 +10,49 @@ $(document).ready(function() {
     $(".story_row").fadeIn(1000);
     $(".quiz").fadeIn(1000);
     $('input[name=choice]').attr('checked',false);
-    $(".story_row").hide();
 });
 
 
 
 var gospel_quiz = {
       questions: [{ 
-                    qs: "Is eternal life a free gift from God?", 
-                    ans: ['True', 'False'], 
-                    right: "0", 
-                    description: "The bible says, '...the gift of God is eternal life in Jesus Christ our Lord' Romans 6:23"}, { 
+                    qs: "Do you have any spiritual beliefs?", 
+                    ans: ['Yes', 'No'], 
+                    right: ["0", "1"],
+                    description: "There is no right or wrong answer to this question as we all are free to\
+                    believe or not believe whatever we want, so you get a point for simply sharing your\
+                    thoughts and answering yes or no."}, { 
                     
-                    qs: "Is there anything you can do to receive eternal life besides accepting God's free gift?", 
-                    ans: ['Yes.. There is?', ' or No... There isn\'t?'], 
-                    right: "0",
-                    description: "Eternal life/Heaven is a gift, and gift are by nature free. Nothing is required by the receipient other\
-                    receiving the gift. No amount of personal effort, good works or religeous deeds can\
-                    will suffice to obtain eternal life/entry into heaven. 'For by greace you have been saved through faith\
-                    —and this not from yourselves, it is the gift of God—not by works, so that no one can boast.' Ephesians 2:8,9"}, {
+                    qs: "To you, who is Jesus the Messiah (or more commonly, The Christ).?", 
+                    ans: ['"The Son of God?"', 'The guy who, "died on a cross?"', "A \"prophet?\"", "A good man and teacher?"], 
+                    right: ["0","1", "2", "3"]
+                    description: "He actually all of those things... So again a point for participation."}, {
                     
-                    qs: "WHY is it that no one can earn their way to Heaven?", 
-                    ans: ['True', 'False'], 
-                    right: "0", 
-                    description: "The bible says, '...the gift of God is eternal life in Jesus Christ our Lord' Romans 6:23"}, {
+                    qs: "Do you think there is a \"heaven\" or \"hell?\"", 
+                    ans: ['Yes', 'No'], 
+                    right: ["0", "1"] 
+                    description: "No right or wrong answer here either... Do you sense a theme here...?"}, {
 
-                    qs: "Is eternal life a free gift from God?", 
-                    ans: ['True', 'False'], 
-                    right: "0", 
-                    description: "The bible says, '...the gift of God is eternal life in Jesus Christ our Lord' Romans 6:23"}, {
+                    qs: "If you died right now where would you go?", 
+                    ans: ['Heaven?', 'or hell?'], 
+                    right: ["0", "1"] 
+                    description: "Whether you answered yes or no, think about the reason why..."}, {
 
-                    qs: "Is eternal life a free gift from God?", 
-                    ans: ['True', 'False'], 
-                    right: "0", 
-                    description: "The bible says, '...the gift of God is eternal life in Jesus Christ our Lord' Romans 6:23"}],
+                    qs: "If what you believe were not true would you like to know?", 
+                    ans: ['Yes?', 'No?'], 
+                    right: ["0", "1"]
+                    description: ""}],
 
   create: function(){
- $("#questions").prepend(this.questions[this.counter].qs);
+    if (this.counter < 5){
+       $("#questions").prepend(this.questions[this.counter].qs);
       $(".one span").append(this.questions[this.counter].ans[0]).text();
       $(".two span").append(this.questions[this.counter].ans[1]).text();
       $(".three span").append(this.questions[this.counter].ans[2]).text();
       $(".four span").append(this.questions[this.counter].ans[3]).text();
+      $('.quiz').fadeIn(500);
+    }
+
   },
   
   counter: 0,
@@ -56,21 +60,23 @@ var gospel_quiz = {
   
   end_quiz: function(){
     if (this.counter === this.total_questions){
-$("#correct_incorrect").append(" Congratulations on finishing the quiz! You correctly answered " +this.correct_answers+  " question(s).");
+      console.log("hi")
+      $("#closing_thoughts").prepend(" Congratulations on finishing the quiz! You correctly answered " +this.correct_answers+  " question(s).");
+      $('.conclusion').show();
     }
   },
   
   correct_answers: 0,
   
   user_answer: function(choice){
-      if (choice === this.questions[this.counter].right){
+      if (choice === this.questions[0].right[0] || choice === this.questions[0].right[1]){
           this.correct_answers++;
-      	 $("#correct_incorrect").prepend("CORRECT!");
+         $("#correct_incorrect").prepend("CORRECT!");
          $('#more_information').prepend(this.questions[this.counter].description).text();    
-	    }else{
-      	 $("#correct_incorrect").prepend("INCORRECT!"); 
+      }else{
+         $("#correct_incorrect").prepend("INCORRECT!"); 
          $('#more_information').prepend(this.questions[this.counter].description).text(); 
-	    }
+      }
   },
   
   on_answer_submit: function(){
@@ -82,8 +88,6 @@ $("#correct_incorrect").append(" Congratulations on finishing the quiz! You corr
   },
 }
 
-
-
  
 $('#answer_button').on("click", function(event){
     var user_choice = $("input[type='radio']:checked").val();
@@ -91,17 +95,21 @@ $('#answer_button').on("click", function(event){
     gospel_quiz.user_answer(user_choice);
     gospel_quiz.counter++;
     $('input[name=choice]').attr('checked',false);
-    $('.story_row').show();
+    $('.story').show();
     $('.quiz').fadeOut(500);
-    gospel_quiz.end_quiz();
 });
-  	
+    
 $('#next_question_button').on("click", function(event){
-    $('.story_row').hide();
+    $('.story').hide();
     $("#correct_incorrect").html('');
     $("#more_information").html('');
     gospel_quiz.on_answer_submit();
+    gospel_quiz.end_quiz();
     gospel_quiz.create();
-    $('.quiz').fadeIn(500);
+    console.log("im here");
 });
-  
+
+
+
+
+
